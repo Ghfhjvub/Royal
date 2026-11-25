@@ -37,7 +37,17 @@ footer{border-top:1px solid var(--line);padding:30px 5vw;color:var(--muted);font
 .toast{position:fixed;bottom:22px;right:50%;transform:translateX(50%);background:#e9d6ae;color:#17150f;padding:12px 20px;border-radius:12px;z-index:80;font-size:11px;box-shadow:0 10px 40px #0008}
 .qrbox{background:white;padding:16px;border-radius:12px;width:max-content;margin:15px auto}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:40px}.heroimg{height:330px}.grid{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.nav{display:none}.adminlayout{grid-template-columns:1fr}.sidebar{display:flex;overflow:auto;border-left:0;border-bottom:1px solid var(--line);padding:10px}.sideitem{white-space:nowrap;width:auto}.adminmain{padding:18px}.promo{padding:25px;flex-wrap:wrap}}
-@media(max-width:520px){.topbar{padding:0 16px;height:65px}.brandname{font-size:13px}.hero{padding:35px 20px}.hero h1{font-size:39px}.heroimg{height:260px}.stats{gap:20px}.section{padding:30px 16px}.grid{gap:10px}.foodimg{height:135px}.foodbody{padding:11px}.foodbody h3{font-size:11px}.foodbody p{font-size:9px}.promo{margin:5px 16px 40px}.sectionhead h2{font-size:21px}.kpis{gap:8px}.kpi{padding:13px}.kpi b{font-size:20px}.adminbar{padding:0 15px}.adminhead h1{font-size:19px}}
+@media(max-width:900px){
+ .topbar{height:auto;min-height:0;display:grid;grid-template-columns:1fr;padding:10px 16px;gap:10px}
+ .brand{justify-self:center}
+ .actions{width:100%;justify-content:space-between;gap:8px}
+ .actions .outline[onclick="installApp()"]{display:none}
+ .actions .goldbtn{padding:10px 14px;white-space:nowrap}
+ .actions .iconbtn{flex:0 0 42px}
+ .heroBtns{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}
+ .heroBtns>*{min-width:0;text-align:center;white-space:nowrap;padding:12px 9px}
+}
+@media(max-width:520px){.topbar{padding:9px 13px;gap:9px}.brandname{font-size:13px}.brandmark{width:38px;height:38px}.actions{gap:7px}.actions .goldbtn{font-size:10px;padding:10px 11px}.actions .iconbtn{width:40px;height:40px;flex-basis:40px}.heroBtns{grid-template-columns:1.2fr 1fr 1fr;gap:7px}.heroBtns>*{font-size:10px;padding:12px 6px}.track-hero-btn i{margin-left:2px}.hero{padding:35px 20px}.brandname{font-size:13px}.hero{padding:35px 20px}.hero h1{font-size:39px}.heroimg{height:260px}.stats{gap:20px}.section{padding:30px 16px}.grid{gap:10px}.foodimg{height:135px}.foodbody{padding:11px}.foodbody h3{font-size:11px}.foodbody p{font-size:9px}.promo{margin:5px 16px 40px}.sectionhead h2{font-size:21px}.kpis{gap:8px}.kpi{padding:13px}.kpi b{font-size:20px}.adminbar{padding:0 15px}.adminhead h1{font-size:19px}}
 </style>
 </head>
 <body>
@@ -45,11 +55,11 @@ footer{border-top:1px solid var(--line);padding:30px 5vw;color:var(--muted);font
 <header class="topbar">
  <a class="brand" href="#"><div class="brandmark">RT</div><div class="brandname">ROYAL TABLE<small>DINING EXPERIENCE</small></div></a>
  <nav class="nav"><a href="#home">الرئيسية</a><a href="#menu">قائمة الطعام</a><a href="#offers">العروض</a><a href="#contact">تواصل معنا</a></nav>
- <div class="actions"><button class="iconbtn" id="themeToggle" onclick="toggleTheme()" aria-label="تغيير الوضع" title="الوضع الليلي أو النهاري"><i data-lucide="sun"></i></button><button class="outline" onclick="openTrackModal()">تتبع طلبك</button><button class="iconbtn" onclick="toggleCart()" aria-label="السلة"><i data-lucide="shopping-bag"></i><span id="cartCount" style="font-size:9px"></span></button><button class="outline" onclick="installApp()" title="تثبيت تطبيق المطعم"><i data-lucide="download" style="width:14px;vertical-align:middle"></i> تثبيت</button><button class="goldbtn" onclick="openLogin()">لوحة الإدارة</button></div>
+ <div class="actions"><button class="iconbtn" id="themeToggle" onclick="toggleTheme()" aria-label="تغيير الوضع" title="الوضع الليلي أو النهاري"><i data-lucide="sun"></i></button><button class="iconbtn" onclick="toggleCart()" aria-label="السلة"><i data-lucide="shopping-bag"></i><span id="cartCount" style="font-size:9px"></span></button><button class="outline" onclick="installApp()" title="تثبيت تطبيق المطعم"><i data-lucide="download" style="width:14px;vertical-align:middle"></i> تثبيت</button><button class="goldbtn" onclick="openLogin()">لوحة الإدارة</button></div>
 </header>
 <section class="hero" id="home">
  <div><div class="eyebrow">✦ تجربة طعام استثنائية</div><h1>نكهات تُروى<br><span>بأناقة ملكية.</span></h1><p>اكتشف تجربة طعام تجمع بين المكونات المختارة بعناية، وفنون الطهي الحديثة، والضيافة التي تليق بك. كل طبق حكاية تستحق أن تُعاش.</p>
- <div class="heroBtns"><a class="goldbtn" href="#menu">اكتشف قائمة الطعام　<i data-lucide="arrow-left" style="width:14px;vertical-align:middle"></i></a><button class="outline" onclick="toggleCart()">عرض السلة</button></div>
+ <div class="heroBtns"><a class="goldbtn" href="#menu">اكتشف قائمة الطعام　<i data-lucide="arrow-left" style="width:14px;vertical-align:middle"></i></a><button class="outline" onclick="toggleCart()">عرض السلة</button><button class="outline track-hero-btn" onclick="openTrackModal()"><i data-lucide="package-search" style="width:15px;vertical-align:middle"></i> تتبع الطلب</button></div>
  <div class="stats"><div class="stat"><b>25+</b><small>طبقاً مميزاً</small></div><div class="stat"><b>4.9</b><small>تقييم ضيوفنا</small></div><div class="stat"><b>100%</b><small>مكونات مختارة</small></div></div></div>
  <div class="heroimg"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=85" alt="مطعم راقٍ"></div>
 </section>
