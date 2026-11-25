@@ -1,0 +1,13 @@
+{
+  "name":"ROYAL TABLE - Restaurant Management",
+  "short_name":"Royal Table",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#11110f",
+  "theme_color":"#11110f",
+  "description":"مطعم Royal Table ولوحة الإدارة",
+  "icons":[
+    {"src":"https://cdn-icons-png.flaticon.com/512/3170/3170733.png","sizes":"192x192","type":"image/png"},
+    {"src":"https://cdn-icons-png.flaticon.com/512/3170/3170733.png","sizes":"512x512","type":"image/png"}
+  ]
+}
