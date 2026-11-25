@@ -33,7 +33,7 @@ footer{border-top:1px solid var(--line);padding:30px 5vw;color:var(--muted);font
 <header class="topbar">
  <a class="brand" href="#"><div class="brandmark">RT</div><div class="brandname">ROYAL TABLE<small>DINING EXPERIENCE</small></div></a>
  <nav class="nav"><a href="#home">الرئيسية</a><a href="#menu">قائمة الطعام</a><a href="#offers">العروض</a><a href="#contact">تواصل معنا</a></nav>
- <div class="actions"><button class="iconbtn" onclick="toggleCart()" aria-label="السلة"><i data-lucide="shopping-bag"></i><span id="cartCount" style="font-size:9px"></span></button><button class="goldbtn" onclick="openLogin()">لوحة الإدارة</button></div>
+ <div class="actions"><button class="iconbtn" onclick="toggleCart()" aria-label="السلة"><i data-lucide="shopping-bag"></i><span id="cartCount" style="font-size:9px"></span></button><button class="outline" onclick="installApp()" title="تثبيت تطبيق المطعم"><i data-lucide="download" style="width:14px;vertical-align:middle"></i> تثبيت</button><button class="goldbtn" onclick="openLogin()">لوحة الإدارة</button></div>
 </header>
 <section class="hero" id="home">
  <div><div class="eyebrow">✦ تجربة طعام استثنائية</div><h1>نكهات تُروى<br><span>بأناقة ملكية.</span></h1><p>اكتشف تجربة طعام تجمع بين المكونات المختارة بعناية، وفنون الطهي الحديثة، والضيافة التي تليق بك. كل طبق حكاية تستحق أن تُعاش.</p>
@@ -46,9 +46,9 @@ footer{border-top:1px solid var(--line);padding:30px 5vw;color:var(--muted);font
 <footer id="contact"><span>© 2026 ROYAL TABLE · جميع الحقوق محفوظة</span><span>صُنع بشغف لتجربة لا تُنسى　✦</span></footer>
 </div>
 <div class="cartpanel" id="cart"><div style="display:flex;justify-content:space-between;align-items:center"><h2>سلة طلباتك</h2><button class="iconbtn" onclick="toggleCart()"><i data-lucide="x"></i></button></div><div id="cartItems"></div><div class="totalrow"><span>الإجمالي</span><b id="cartTotal">0 ج.س</b></div><button class="goldbtn" style="width:100%" onclick="checkout()">تأكيد الطلب</button></div>
-<div class="overlay hidden" id="loginModal"><div class="modal"><div style="display:flex;justify-content:space-between"><h2>دخول لوحة الإدارة</h2><button onclick="closeModal('loginModal')" class="iconbtn"><i data-lucide="x"></i></button></div><p class="muted">أدخل رمز الدخول الخاص بك للمتابعة.</p><div class="field"><label>رمز الدخول</label><input id="pin" type="password" inputmode="numeric" placeholder="••••" maxlength="12"></div><div id="loginError" class="muted" style="color:var(--red)"></div><button class="goldbtn" style="width:100%;margin-top:10px" onclick="login()">دخول آمن</button><p class="muted" style="margin-top:16px">المدير والعامل لكل منهما صلاحيات مختلفة.</p></div></div>
+<div class="overlay hidden" id="loginModal"><div class="modal"><div style="display:flex;justify-content:space-between"><h2>دخول لوحة الإدارة</h2><button onclick="closeModal('loginModal')" class="iconbtn"><i data-lucide="x"></i></button></div><p class="muted">سجّل الدخول بحساب Firebase الذي أنشأه مدير النظام.</p><div class="field"><label>البريد الإلكتروني</label><input id="authEmail" type="email" autocomplete="username" placeholder="name@example.com"></div><div class="field"><label>كلمة المرور</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••"></div><div id="loginError" class="muted" style="color:var(--red)"></div><button class="goldbtn" style="width:100%;margin-top:10px" onclick="login()">دخول آمن</button><p class="muted" style="margin-top:16px">تُحدد صلاحيات المدير والعامل من ملف المستخدم داخل Firebase.</p></div></div>
 <div class="overlay hidden" id="checkoutModal"><div class="modal"><div style="display:flex;justify-content:space-between"><h2>إتمام الطلب</h2><button onclick="closeModal('checkoutModal')" class="iconbtn"><i data-lucide="x"></i></button></div><div class="field"><label>اسم العميل</label><input id="customer" placeholder="الاسم الكامل"></div><div class="field"><label>رقم الهاتف</label><input id="phone" placeholder="رقم التواصل"></div><div class="field"><label>طريقة الاستلام</label><select id="delivery"><option>استلام من المطعم</option><option>توصيل</option></select></div><div class="field"><label>ملاحظات الطلب</label><textarea id="notes" rows="2" placeholder="أي تفاصيل إضافية..."></textarea></div><div class="totalrow"><span>الإجمالي</span><b id="checkoutTotal"></b></div><button class="goldbtn" style="width:100%" onclick="placeOrder()">إرسال الطلب</button></div></div>
-<div class="overlay hidden" id="editModal"><div class="modal"><div style="display:flex;justify-content:space-between"><h2 id="editTitle">إضافة طبق</h2><button onclick="closeModal('editModal')" class="iconbtn"><i data-lucide="x"></i></button></div><input id="editId" type="hidden"><div class="field"><label>اسم الطبق</label><input id="editName"></div><div class="field"><label>التصنيف</label><input id="editCat" placeholder="الأطباق الرئيسية"></div><div class="field"><label>السعر (جنيه سوداني)</label><input id="editPrice" type="number" min="0"></div><div class="field"><label>اختيار صورة من ملفات الهاتف أو الكمبيوتر</label><input id="editImageFile" type="file" accept="image/*" onchange="previewProductImage(this)"></div><div class="field" id="imageUrlField"><label>أو رابط الصورة</label><input id="editImage" placeholder="https://..."></div><div class="field"><label>معاينة الصورة</label><img id="editImagePreview" alt="معاينة الطبق" style="width:100%;max-height:190px;object-fit:cover;border-radius:12px;background:#111"></div><div class="field" id="editDescField"><label>وصف الطبق</label><textarea id="editDesc" rows="2"></textarea></div><button class="goldbtn" style="width:100%" onclick="saveProduct()">حفظ التعديلات</button></div></div>
+<div class="overlay hidden" id="editModal"><div class="modal"><div style="display:flex;justify-content:space-between"><h2 id="editTitle">إضافة طبق</h2><button onclick="closeModal('editModal')" class="iconbtn"><i data-lucide="x"></i></button></div><input id="editId" type="hidden"><div class="field"><label>اسم الطبق</label><input id="editName"></div><div class="field"><label>التصنيف</label><input id="editCat" placeholder="الأطباق الرئيسية"></div><div class="field"><label>السعر (جنيه سوداني)</label><input id="editPrice" type="number" min="0"></div><div class="field"><label>صورة المنتج عبر رابط مباشر</label><p class="muted">استخدم رابط صورة يبدأ بـ https://؛ لا يتم رفع الصور إلى Firebase.</p></div><div class="field" id="imageUrlField"><label>أو رابط الصورة</label><input id="editImage" placeholder="https://..."></div><div class="field"><label>معاينة الصورة</label><img id="editImagePreview" alt="معاينة الطبق" style="width:100%;max-height:190px;object-fit:cover;border-radius:12px;background:#111"></div><div class="field" id="editDescField"><label>وصف الطبق</label><textarea id="editDesc" rows="2"></textarea></div><button class="goldbtn" style="width:100%" onclick="saveProduct()">حفظ التعديلات</button></div></div>
 <div class="overlay hidden" id="qrModal"><div class="modal" style="text-align:center"><div style="display:flex;justify-content:space-between"><h2>رمز QR للمطعم</h2><button onclick="closeModal('qrModal')" class="iconbtn"><i data-lucide="x"></i></button></div><p class="muted">امسح الرمز لفتح رابط الموقع الحالي.</p><div id="qrcode" class="qrbox"></div><div id="qrUrl" class="muted" style="direction:ltr;word-break:break-all"></div><button class="goldbtn" style="width:100%;margin-top:15px" onclick="window.print()">طباعة / حفظ الرمز</button></div></div>
 <div id="admin" class="admin hidden">
  <header class="adminbar"><a class="brand" href="#"><div class="brandmark">RT</div><div class="brandname">ROYAL TABLE<small>MANAGEMENT SUITE</small></div></a><div style="display:flex;gap:9px;align-items:center"><span id="roleLabel" class="muted"></span><button class="outline" onclick="installApp()">تثبيت التطبيق　<i data-lucide="smartphone" style="width:14px;vertical-align:middle"></i></button><button class="iconbtn" onclick="logout()"><i data-lucide="log-out"></i></button></div></header>
@@ -61,7 +61,7 @@ footer{border-top:1px solid var(--line);padding:30px 5vw;color:var(--muted);font
  <button class="sideitem" data-page="settings" onclick="showPage('settings',this)"><i data-lucide="settings"></i> الإعدادات</button>
  </aside><main class="adminmain" id="adminContent"></main></div>
 </div>
-<script src="https://unpkg.com/lucide@latest"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script><script src="https://unpkg.com/lucide@latest"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const photoTags={
 "البيتزا":["pizza-margherita","pepperoni-pizza","four-cheese-pizza","vegetable-pizza","bbq-chicken-pizza","chicken-mushroom-pizza","smoked-beef-pizza","supreme-pizza","hawaiian-pizza","white-alfredo-pizza","seafood-pizza","spicy-sausage-pizza","chicken-ranch-pizza","olive-feta-pizza","truffle-mushroom-pizza"],
@@ -136,9 +136,29 @@ function logsPage(){return `<div class="adminhead"><div><h1>سجل العملي�
 function qrPage(){return `<div class="adminhead"><div><h1>رمز QR للمطعم</h1><div class="muted">إنشاء رمز لمشاركة رابط المنيو مع العملاء</div></div></div><div class="panel" style="text-align:center;padding:35px"><i data-lucide="qr-code" style="width:35px;height:35px;color:var(--gold)"></i><h3 style="margin-top:15px">إنشاء رمز QR للموقع</h3><p class="muted">سيتم ترميز عنوان الموقع الحالي. ارفع الموقع على استضافة HTTPS قبل مشاركة الرمز.</p><button class="goldbtn" onclick="makeQR()">إنشاء QR الآن</button></div>`}
 function settingsPage(){return `<div class="adminhead"><div><h1>الإعدادات</h1><div class="muted">إعدادات لوحة التحكم والمطعم</div></div></div><div class="panel"><h3>معلومات النظام</h3><p class="muted">اسم الواجهة: ROYAL TABLE</p><p class="muted">العملة الافتراضية: جنيه سوداني (ج.س)</p><p class="muted">التخزين الحالي: محلي على هذا المتصفح والجهاز</p><button class="smallbtn danger" onclick="if(confirm('سيتم حذف بيانات التجربة المحلية من هذا الجهاز. هل أنت متأكد؟')){localStorage.clear();location.reload()}">إعادة ضبط بيانات هذا الجهاز</button></div><div class="panel"><h3>الصلاحيات</h3><p class="muted">المدير: إدارة المنتجات والأسعار والصور وجميع أقسام لوحة التحكم.</p><p class="muted">العامل: متابعة الطلبات وتحديث حالتها ومراجعة السجلات وتعديل اسم الطبق وسعره وصورته من الجهاز.</p></div>`}
 function setOrderStatus(id,s){let o=orders.find(x=>x.id===id);if(!o)return;o.status=s;log("تحديث حالة طلب",`الطلب #${String(id).slice(-5)} أصبح ${s}`);persist();showPage("orders",document.querySelector('[data-page=orders]'));toast("تم تحديث حالة الطلب")}
-function editProduct(id){if(!role)return;let p=products.find(x=>x.id===id),manager=role==="مدير";if(!p&&!manager)return toast("العامل لا يمكنه إضافة أطباق جديدة");document.getElementById("editTitle").textContent=p?"تعديل بيانات الطبق":"إضافة طبق جديد";document.getElementById("editId").value=p?.id||"";document.getElementById("editName").value=p?.name||"";document.getElementById("editCat").value=p?.cat||"";document.getElementById("editPrice").value=p?.price||"";document.getElementById("editImage").value=p?.img?.startsWith("data:")?"":(p?.img||"");document.getElementById("editDesc").value=p?.desc||"";document.getElementById("editImageFile").value="";document.getElementById("editImagePreview").src=p?.img||"";document.getElementById("editCat").closest(".field").classList.toggle("hidden",!manager);document.getElementById("editDescField").classList.toggle("hidden",!manager);document.getElementById("imageUrlField").classList.toggle("hidden",!manager);document.getElementById("editModal").classList.remove("hidden")}
+function editProduct(id){if(!role)return;let p=products.find(x=>x.id===id),manager=role==="مدير";if(!p&&!manager)return toast("العامل لا يمكنه إضافة أطباق جديدة");document.getElementById("editTitle").textContent=p?"تعديل بيانات الطبق":"إضافة طبق جديد";document.getElementById("editId").value=p?.id||"";document.getElementById("editName").value=p?.name||"";document.getElementById("editCat").value=p?.cat||"";document.getElementById("editPrice").value=p?.price||"";document.getElementById("editImage").value=p?.img?.startsWith("data:")?"":(p?.img||"");document.getElementById("editDesc").value=p?.desc||"";document.getElementById("editImagePreview").src=p?.img||"";document.getElementById("editCat").closest(".field").classList.toggle("hidden",!manager);document.getElementById("editDescField").classList.toggle("hidden",!manager);document.getElementById("imageUrlField").classList.toggle("hidden",!manager);document.getElementById("editModal").classList.remove("hidden")}
 function previewProductImage(input){let file=input.files&&input.files[0];if(!file)return;if(!file.type.startsWith("image/"))return toast("اختر ملف صورة صالحاً");if(file.size>12*1024*1024)return toast("حجم الصورة كبير جداً؛ اختر صورة أقل من 12 ميجابايت");let reader=new FileReader();reader.onload=()=>{let image=new Image();image.onload=()=>{let max=1000,scale=Math.min(1,max/Math.max(image.width,image.height)),canvas=document.createElement("canvas");canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext("2d").drawImage(image,0,0,canvas.width,canvas.height);document.getElementById("editImagePreview").src=canvas.toDataURL("image/jpeg",.78)};image.src=reader.result};reader.readAsDataURL(file)}
 function imageFileAsDataUrl(file){return new Promise((resolve,reject)=>{if(!file)return resolve(null);let reader=new FileReader();reader.onerror=reject;reader.onload=()=>{let im=new Image();im.onerror=reject;im.onload=()=>{let max=1000,scale=Math.min(1,max/Math.max(im.width,im.height)),canvas=document.createElement("canvas");canvas.width=Math.round(im.width*scale);canvas.height=Math.round(im.height*scale);canvas.getContext("2d").drawImage(im,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL("image/jpeg",.78))};im.src=reader.result};reader.readAsDataURL(file)})}
+
+function editProduct(id){
+  if(!role)return;
+  let p=id==null?null:products.find(x=>String(x.id)===String(id)),manager=role==="مدير";
+  if(id!=null&&!p)return toast("لم يتم العثور على الطبق");
+  if(!p&&!manager)return toast("العامل لا يمكنه إضافة أطباق جديدة");
+  document.getElementById("editTitle").textContent=p?"تعديل بيانات الطبق":"إضافة طبق جديد";
+  document.getElementById("editId").value=p?.id||"";
+  document.getElementById("editName").value=p?.name||"";
+  document.getElementById("editCat").value=p?.cat||"";
+  document.getElementById("editPrice").value=p?.price??"";
+  document.getElementById("editImage").value=p?.img?.startsWith("data:")?"":(p?.img||"");
+  document.getElementById("editDesc").value=p?.desc||"";
+  document.getElementById("editImagePreview").src=p?.img||"";
+  document.getElementById("editCat").closest(".field").classList.toggle("hidden",!manager);
+  document.getElementById("editDescField").classList.toggle("hidden",!manager);
+  document.getElementById("imageUrlField").classList.toggle("hidden",!manager);
+  document.getElementById("editModal").classList.remove("hidden");
+}
+
 async function saveProduct(){let id=document.getElementById("editId").value,name=document.getElementById("editName").value.trim(),price=Number(document.getElementById("editPrice").value),file=document.getElementById("editImageFile").files[0],manager=role==="مدير",p=products.find(x=>x.id==id);if(!name||!price||price<0)return toast("أدخل اسم الطبق وسعراً صحيحاً");if(!p&&!manager)return toast("لا تملك صلاحية إضافة طبق");let uploaded=null;try{uploaded=await imageFileAsDataUrl(file)}catch(e){return toast("تعذر قراءة الصورة؛ جرّب صورة أخرى")};let img=uploaded||(manager?document.getElementById("editImage").value.trim():p?.img);if(!img)return toast("اختر صورة من جهازك أو أدخل رابطاً");if(p){if(manager){let cat=document.getElementById("editCat").value.trim(),desc=document.getElementById("editDesc").value.trim();if(!cat)return toast("أدخل تصنيف الطبق");Object.assign(p,{name,cat,price,img,desc})}else{Object.assign(p,{name,price,img})}log(manager?"تعديل منتج (المدير)":"تعديل منتج (العامل)",`${p.name} · ${money(price)}`)}else{let cat=document.getElementById("editCat").value.trim();if(!cat)return toast("أدخل تصنيف الطبق");products.unshift({id:Date.now(),name,cat,price,img,desc:document.getElementById("editDesc").value.trim()});log("إضافة منتج",name)}try{persist()}catch(e){return toast("مساحة التخزين ممتلئة؛ اختر صورة أصغر")};closeModal("editModal");renderMenu();showPage("products",document.querySelector('[data-page="products"]'));toast("تم حفظ تعديلات الطبق بنجاح")}
 function deleteProduct(id){if(role!=="مدير")return;if(!confirm("هل تريد حذف هذا المنتج؟"))return;let p=products.find(x=>x.id===id);products=products.filter(x=>x.id!==id);log("حذف منتج",p?.name||id);persist();renderMenu();showPage("products",document.querySelector('[data-page=products]'))}
 function makeQR(){let url=location.href.split("#")[0];document.getElementById("qrcode").innerHTML="";new QRCode(document.getElementById("qrcode"),{text:url,width:210,height:210,colorDark:"#11110f",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});document.getElementById("qrUrl").textContent=url;document.getElementById("qrModal").classList.remove("hidden")}
@@ -146,6 +166,258 @@ function exportLogs(){let csv="الوقت,المستخدم,العملية,الت
 function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>deferredPrompt=null)}else toast("افتح الموقع عبر Chrome بعد رفعه على HTTPS، ثم اختر إضافة إلى الشاشة الرئيسية")}
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
 if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+
+// ===== Firebase integration for ROYAL TABLE =====
+const firebaseConfig = {
+  apiKey: "AIzaSyDTTZC22Z2EmH5fU9Ly6S05ClL81d5rg7c",
+  authDomain: "hassony-c71fc.firebaseapp.com",
+  projectId: "hassony-c71fc",
+  messagingSenderId: "279607255565",
+  appId: "1:279607255565:web:f8c331370d5694e8156b44",
+  measurementId: "G-9DH4TCB8D9"
+};
+let fbApp, fbAuth, fbDb, currentUser=null, currentProfile=null;
+let unsubProducts=null, unsubOrders=null, unsubLogs=null, lastSeenOrderIds=new Set(), firebaseReady=false;
+try {
+  fbApp = firebase.initializeApp(firebaseConfig);
+  fbAuth = firebase.auth();
+  fbDb = firebase.firestore();
+  firebaseReady = true;
+} catch (e) { console.error("Firebase initialization failed",e); }
+function fbError(e){
+  const map={
+    "auth/invalid-credential":"البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "auth/user-not-found":"لا يوجد حساب بهذا البريد.",
+    "auth/wrong-password":"كلمة المرور غير صحيحة.",
+    "auth/too-many-requests":"محاولات كثيرة؛ انتظر قليلاً ثم حاول مجدداً.",
+    "permission-denied":"لا تملك صلاحية تنفيذ هذه العملية. راجع قواعد Firebase."
+  };
+  return map[e?.code] || e?.message || "حدث خطأ غير متوقع.";
+}
+function setRoleFromProfile(profile){
+  currentProfile=profile;
+  role=profile.role==="admin"?"مدير":profile.role==="worker"?"عامل":null;
+  if(!role) throw new Error("حسابك غير مرتبط بدور مدير أو عامل. اطلب من المدير ضبط users/{uid}.role في Firestore.");
+}
+function stopFirebaseListeners(){
+  [unsubProducts,unsubOrders,unsubLogs].forEach(fn=>{if(typeof fn==="function")fn()});
+  unsubProducts=unsubOrders=unsubLogs=null;
+}
+function startFirebaseListeners(){
+  stopFirebaseListeners();
+  if(!firebaseReady)return;
+  unsubProducts=fbDb.collection("products").onSnapshot(snap=>{
+    if(!snap.empty){
+      products=snap.docs.map(d=>({...d.data(),id:Number(d.id)||d.id}));
+      localStorage.setItem("rt_products",JSON.stringify(products));
+      renderMenu(); if(role) showPage("products",document.querySelector('[data-page="products"]'));
+    } else if(role==="مدير") {
+      // Seed is imported explicitly from the manager's local menu to avoid public writes.
+    }
+  },e=>toast("تعذر تحميل المنتجات: "+fbError(e)));
+  if(role){
+    unsubOrders=fbDb.collection("orders").orderBy("createdAt","desc").limit(300).onSnapshot(snap=>{
+      const fresh=snap.docs.map(d=>({...d.data(),id:Number(d.id)||d.id,time:d.data().createdAt?.toDate?.().toLocaleString("ar")||d.data().time||""}));
+      const newOnes=fresh.filter(o=>!lastSeenOrderIds.has(String(o.id)) && o.status==="جديد");
+      if(lastSeenOrderIds.size) newOnes.forEach(o=>notifyNewOrder(o));
+      lastSeenOrderIds=new Set(fresh.map(o=>String(o.id)));
+      orders=fresh; localStorage.setItem("rt_orders",JSON.stringify(orders));
+      if(document.getElementById("admin") && !document.getElementById("admin").classList.contains("hidden")){
+        const active=document.querySelector(".sideitem.active")?.dataset.page||"dashboard";
+        showPage(active,document.querySelector(`[data-page="${active}"]`));
+      }
+    },e=>toast("تعذر مزامنة الطلبات: "+fbError(e)));
+    const logQuery=role==="مدير"?fbDb.collection("activity_logs").orderBy("createdAt","desc").limit(500):fbDb.collection("activity_logs").where("uid","==",currentUser.uid).limit(300);
+    unsubLogs=logQuery.onSnapshot(snap=>{
+      logs=snap.docs.map(d=>({...d.data(),id:d.id,time:d.data().createdAt?.toDate?.().toLocaleString("ar")||d.data().time||""}));
+      if(document.querySelector('[data-page="logs"].active'))showPage("logs",document.querySelector('[data-page="logs"]'));
+    },e=>console.warn("Logs listener",e));
+  }
+}
+function notifyNewOrder(o){
+  try{
+    const a=new AudioContext(),osc=a.createOscillator(),gain=a.createGain();
+    osc.type="sine";osc.frequency.setValueAtTime(880,a.currentTime);
+    gain.gain.setValueAtTime(.0001,a.currentTime);gain.gain.exponentialRampToValueAtTime(.22,a.currentTime+.03);gain.gain.exponentialRampToValueAtTime(.0001,a.currentTime+.55);
+    osc.connect(gain);gain.connect(a.destination);osc.start();osc.stop(a.currentTime+.58);setTimeout(()=>a.close(),700);
+  }catch(e){}
+  toast("🔔 طلب جديد من "+o.name+" — "+money(o.total));
+  if("Notification" in window && Notification.permission==="granted"){
+    try{new Notification("طلب جديد – ROYAL TABLE",{body:`${o.name} · ${money(o.total)}`,tag:"order-"+o.id})}catch(e){}
+  }
+}
+async function requestNotificationPermission(){
+  if("Notification" in window && Notification.permission==="default"){
+    const p=await Notification.requestPermission();
+    toast(p==="granted"?"تم تفعيل إشعارات المتصفح":"لم يتم السماح بالإشعارات");
+  }
+}
+function persist(){
+  // Local cache only; Firestore is the source of truth when connected.
+  try{
+    localStorage.setItem("rt_products",JSON.stringify(products));
+    localStorage.setItem("rt_orders",JSON.stringify(orders));
+    localStorage.setItem("rt_logs",JSON.stringify(logs));
+  }catch(e){console.warn("Local cache full",e)}
+}
+async function log(action,detail){
+  const entry={uid:currentUser?.uid||null,by:currentProfile?.displayName||currentUser?.email||role||"زائر",role:currentProfile?.role||"customer",action,detail:String(detail||""),time:new Date().toLocaleString("ar"),createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  try{
+    if(currentUser) await fbDb.collection("activity_logs").add(entry);
+    else {logs.unshift(entry);localStorage.setItem("rt_logs",JSON.stringify(logs))}
+  }catch(e){console.error("Activity log failed",e)}
+}
+async function login(){
+  const email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;
+  const err=document.getElementById("loginError");err.textContent="";
+  if(!email||!password){err.textContent="أدخل البريد الإلكتروني وكلمة المرور.";return}
+  try{
+    const cred=await fbAuth.signInWithEmailAndPassword(email,password);
+    currentUser=cred.user;
+    const doc=await fbDb.collection("users").doc(currentUser.uid).get();
+    if(!doc.exists) throw new Error("لم يتم إعداد ملف صلاحيات هذا الحساب في users. راجع دليل إعداد Firebase المرفق.");
+    setRoleFromProfile(doc.data());
+    if(!role) throw new Error("هذا الحساب ليس لديه صلاحية دخول لوحة الإدارة.");
+    closeModal("loginModal");document.getElementById("store").classList.add("hidden");
+    document.getElementById("cart").classList.remove("open");document.getElementById("admin").classList.remove("hidden");
+    document.getElementById("roleLabel").textContent=(currentProfile.displayName||currentUser.email)+" · "+role;
+    await log("تسجيل دخول","تم تسجيل الدخول إلى لوحة "+role);
+    startFirebaseListeners();requestNotificationPermission();
+    showPage("dashboard",document.querySelector('[data-page="dashboard"]'));
+  }catch(e){err.textContent=fbError(e);if(currentUser){await fbAuth.signOut();currentUser=null;currentProfile=null;role=null}}
+}
+async function logout(){
+  try{await log("تسجيل خروج","تم تسجيل الخروج");}catch(e){}
+  stopFirebaseListeners();if(fbAuth)await fbAuth.signOut().catch(()=>{});
+  currentUser=null;currentProfile=null;role=null;
+  document.getElementById("admin").classList.add("hidden");document.getElementById("store").classList.remove("hidden");renderMenu();
+}
+async function placeOrder(){
+  let name=document.getElementById("customer").value.trim(),phone=document.getElementById("phone").value.trim();
+  if(!name||!phone)return toast("يرجى إدخال الاسم ورقم الهاتف");
+  if(!firebaseReady)return toast("الاتصال بقاعدة البيانات غير متاح حالياً");
+  let lines=Object.entries(cart).map(([id,q])=>{let p=products.find(x=>x.id==id);return p?{id:String(id),name:p.name,price:Number(p.price),qty:q}:null}).filter(Boolean);
+  if(!lines.length)return toast("السلة فارغة");
+  let total=lines.reduce((s,x)=>s+x.price*x.qty,0),id=String(Date.now());
+  const order={name,phone,delivery:document.getElementById("delivery").value,notes:document.getElementById("notes").value,items:lines,total,status:"جديد",createdAt:firebase.firestore.FieldValue.serverTimestamp(),time:new Date().toLocaleString("ar")};
+  try{
+    await fbDb.collection("orders").doc(id).set(order);
+    cart={};renderCart();closeModal("checkoutModal");document.getElementById("cart").classList.remove("open");
+    toast("تم إرسال طلبك بنجاح إلى المطعم");
+  }catch(e){toast("تعذر إرسال الطلب: "+fbError(e))}
+}
+async function setOrderStatus(id,s){
+  if(!currentUser||!role)return toast("سجّل الدخول أولاً");
+  try{
+    await fbDb.collection("orders").doc(String(id)).update({status:s,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentProfile.displayName||currentUser.email});
+    await log("تحديث حالة طلب",`الطلب #${String(id).slice(-5)} أصبح ${s}`);
+    toast("تم تحديث حالة الطلب");
+  }catch(e){toast("تعذر تحديث الطلب: "+fbError(e))}
+}
+
+function editProduct(id){
+  if(!role)return;
+  let p=id==null?null:products.find(x=>String(x.id)===String(id)),manager=role==="مدير";
+  if(id!=null&&!p)return toast("لم يتم العثور على الطبق");
+  if(!p&&!manager)return toast("العامل لا يمكنه إضافة أطباق جديدة");
+  document.getElementById("editTitle").textContent=p?"تعديل بيانات الطبق":"إضافة طبق جديد";
+  document.getElementById("editId").value=p?.id||"";
+  document.getElementById("editName").value=p?.name||"";
+  document.getElementById("editCat").value=p?.cat||"";
+  document.getElementById("editPrice").value=p?.price??"";
+  document.getElementById("editImage").value=p?.img?.startsWith("data:")?"":(p?.img||"");
+  document.getElementById("editDesc").value=p?.desc||"";
+  document.getElementById("editImagePreview").src=p?.img||"";
+  document.getElementById("editCat").closest(".field").classList.toggle("hidden",!manager);
+  document.getElementById("editDescField").classList.toggle("hidden",!manager);
+  document.getElementById("imageUrlField").classList.toggle("hidden",!manager);
+  document.getElementById("editModal").classList.remove("hidden");
+}
+
+async function saveProduct(){
+  if(!currentUser||!role)return toast("يجب تسجيل الدخول");
+  const id=document.getElementById("editId").value,name=document.getElementById("editName").value.trim(),price=Number(document.getElementById("editPrice").value);
+  const manager=role==="مدير",p=products.find(x=>String(x.id)===String(id));
+  if(!name||!Number.isFinite(price)||price<0)return toast("أدخل اسم الطبق وسعراً صحيحاً");
+  if(!p&&!manager)return toast("لا تملك صلاحية إضافة طبق");
+  try{
+    let img=p?.img||"";
+    if(manager && document.getElementById("editImage").value.trim()) img=document.getElementById("editImage").value.trim();
+    if(!img)return toast("أدخل رابط صورة مباشر يبدأ بـ https://"); 
+    if(!/^https:\/\//i.test(img))return toast("يجب أن يبدأ رابط الصورة بـ https://");
+    const data={name,price,img,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentProfile.displayName||currentUser.email};
+    if(manager){
+      const cat=document.getElementById("editCat").value.trim();
+      if(!cat)return toast("أدخل تصنيف الطبق");
+      data.cat=cat;data.desc=document.getElementById("editDesc").value.trim();
+    }
+    if(p) await fbDb.collection("products").doc(String(p.id)).update(data);
+    else {
+      const newId=String(Date.now());data.cat=document.getElementById("editCat").value.trim();data.desc=document.getElementById("editDesc").value.trim();
+      await fbDb.collection("products").doc(newId).set(data);
+    }
+    await log(p?"تعديل منتج":"إضافة منتج",`${name} · ${money(price)}`);
+    closeModal("editModal");toast("تم حفظ الطبق في قاعدة البيانات");
+  }catch(e){toast("تعذر حفظ المنتج: "+fbError(e))}
+}
+async function deleteProduct(id){
+  if(role!=="مدير")return toast("هذه الصلاحية للمدير فقط");
+  if(!confirm("هل تريد حذف هذا المنتج من قاعدة البيانات؟"))return;
+  try{const p=products.find(x=>String(x.id)===String(id));await fbDb.collection("products").doc(String(id)).delete();await log("حذف منتج",p?.name||id);toast("تم حذف المنتج")}
+  catch(e){toast("تعذر حذف المنتج: "+fbError(e))}
+}
+async function importLocalMenuToFirebase(){
+  if(role!=="مدير")return toast("استيراد القائمة متاح للمدير فقط");
+  if(!confirm(`سيتم رفع ${products.length} طبقاً من القائمة الحالية إلى Firebase. سيتم تجاوز أي طبق له نفس المعرف. متابعة؟`))return;
+  try{
+    let batch=fbDb.batch(),count=0;
+    for(const p of products){
+      const ref=fbDb.collection("products").doc(String(p.id));
+      batch.set(ref,{name:p.name,cat:p.cat,price:Number(p.price),img:p.img,desc:p.desc||"",importedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      count++;
+      if(count%400===0){await batch.commit();batch=fbDb.batch()}
+    }
+    if(count%400)await batch.commit();
+    await log("استيراد قائمة الطعام",`تم استيراد ${count} طبقاً إلى Firestore`);
+    toast(`تم استيراد ${count} طبقاً بنجاح`);
+  }catch(e){toast("فشل الاستيراد: "+fbError(e))}
+}
+function productsPage(){
+  let manager=role==="مدير";
+  return `<div class="adminhead"><div><h1>إدارة قائمة الطعام</h1><div class="muted">${manager?"إدارة القائمة المركزية وصورها وأسعارها.":"اضغط على أي طبق لتعديل اسمه وسعره وصورته."}</div></div>${manager?'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="outline" onclick="importLocalMenuToFirebase()">استيراد القائمة الحالية</button><button class="goldbtn" onclick="editProduct()">＋ إضافة طبق</button></div>':""}</div><div class="panel"><table class="table"><thead><tr><th>المنتج</th><th>التصنيف</th><th>السعر</th><th>الإجراءات</th></tr></thead><tbody>${products.map(p=>`<tr onclick="editProduct('${p.id}')" style="cursor:pointer"><td><div class="productrow"><img src="${esc(p.img)}" onerror="this.style.opacity='.2'"><b>${esc(p.name)}</b></div></td><td>${esc(p.cat)}</td><td>${money(p.price)}</td><td><button class="smallbtn" onclick="event.stopPropagation();editProduct('${p.id}')">تعديل الطبق</button>${manager?`<button class="smallbtn danger" onclick="event.stopPropagation();deleteProduct('${p.id}')">حذف</button>`:""}</td></tr>`).join("")||'<tr><td colspan="4">لا توجد منتجات في Firestore. استورد القائمة الحالية من زر المدير.</td></tr>'}</tbody></table></div>`;
+}
+function logsPage(){
+  const grouped={};logs.forEach(l=>{const key=l.uid||l.by||"غير معروف";(grouped[key]??=[]).push(l)});
+  return `<div class="adminhead"><div><h1>سجل العمليات والمراجعات</h1><div class="muted">اضغط على اسم المستخدم لعرض جميع عملياته بالتفصيل</div></div><button class="outline" onclick="exportLogs()">تصدير السجل CSV</button></div><div class="panel">${Object.entries(grouped).map(([key,items])=>`<details style="border-bottom:1px solid #333;padding:12px"><summary style="cursor:pointer;font-weight:700">${esc(items[0]?.by||key)} <span class="muted">· ${items.length} عملية</span></summary><div style="overflow:auto"><table class="table"><thead><tr><th>الوقت</th><th>العملية</th><th>التفاصيل</th></tr></thead><tbody>${items.map(l=>`<tr><td>${esc(l.time||"")}</td><td>${esc(l.action)}</td><td>${esc(l.detail)}</td></tr>`).join("")}</tbody></table></div></details>`).join("")||'<p class="muted">لا توجد سجلات بعد.</p>'}</div>`;
+}
+function settingsPage(){
+  return `<div class="adminhead"><div><h1>الإعدادات</h1><div class="muted">حالة اتصال المطعم بخدمات Firebase</div></div></div><div class="panel"><p>المشروع: <b>hassony-c71fc</b></p><p>مصدر البيانات: <b>Cloud Firestore</b></p><p>الصور: <b>روابط خارجية فقط (بدون Storage)</b></p><p>حالة الاتصال: <b style="color:#4ade80">تم تهيئة Firebase SDK</b></p><button class="outline" onclick="requestNotificationPermission()">تفعيل إشعارات هذا الجهاز</button></div><div class="panel"><h3>إدارة الحسابات</h3><p class="muted">أنشئ حسابات الموظفين من Firebase Authentication، ثم أضف ملفاً مطابقاً في مجموعة users مع uid والبريد والاسم والدور worker أو admin. راجع دليل الإعداد المرفق.</p></div>`;
+}
+async function startFirebaseAuthState(){
+  if(!firebaseReady)return;
+  fbAuth.onAuthStateChanged(async user=>{
+    if(!user)return;
+    // Do not auto-enter the dashboard until the role profile is confirmed.
+    try{
+      const snap=await fbDb.collection("users").doc(user.uid).get();
+      if(!snap.exists)return;
+      currentUser=user;setRoleFromProfile(snap.data());
+      if(!role)return;
+      document.getElementById("store").classList.add("hidden");
+      document.getElementById("admin").classList.remove("hidden");
+      document.getElementById("roleLabel").textContent=(currentProfile.displayName||user.email)+" · "+role;
+      startFirebaseListeners();
+      showPage("dashboard",document.querySelector('[data-page="dashboard"]'));
+    }catch(e){console.warn("Auth profile",e)}
+  });
+}
+function openLogin(){document.getElementById("loginModal").classList.remove("hidden");document.getElementById("loginError").textContent="";}
+function installApp(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>deferredPrompt=null)}
+  else toast("إذا لم يظهر خيار التثبيت، افتح الموقع من Chrome عبر HTTPS ثم اختر القائمة ⋮ ← تثبيت التطبيق أو إضافة إلى الشاشة الرئيسية.");
+}
+startFirebaseAuthState();
+
 renderMenu();renderCart();icons();
 </script>
 </body></html>
