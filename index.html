@@ -1110,9 +1110,13 @@ applyTheme(localStorage.getItem("rt_theme")||"dark");toggleTableField();renderMe
           : { key: 'menu', byPath: false };
   var root = cur.byPath ? path.replace(/(cashier|manager)(\/(index\.html)?)?$/i, '') : path.replace(/[^\/]*$/, '');
 
-  function urlFor(key) {
-    if (cur.byPath) return origin + root + (key === 'menu' ? '' : key + '/');
-    return origin + path + (key === 'menu' ? '' : '?app=' + key);
+  var menuFile = /\/$/.test(path) ? path + 'index.html' : (cur.byPath ? root + 'index.html' : path);
+  var hasSW = 'serviceWorker' in navigator && /^https?:$/.test(loc.protocol);
+  function urlFor(key) { return origin + (key === 'menu' ? menuFile : root + key + '/'); }
+  // رابط للتنقل بين التطبيقات: المسار النظيف إن كان الـ SW يعمل، وإلا ?app=
+  function linkFor(key) {
+    var ctl = hasSW && navigator.serviceWorker.controller;
+    return (cur.byPath || ctl) ? urlFor(key) : origin + menuFile + '?app=' + key;
   }
 
   // 2) manifest مستقل لكل تطبيق (id + اسم + أيقونة + start_url خاصة به)
@@ -1120,7 +1124,7 @@ applyTheme(localStorage.getItem("rt_theme")||"dark");toggleTableField();renderMe
     var a = APPS[key], ic = ICONS[key], start = urlFor(key);
     var m = {
       id: start, name: a.name, short_name: a.short, description: a.desc,
-      start_url: start, scope: cur.byPath ? start : origin + root,
+      start_url: start, scope: start,
       display: 'standalone', background_color: '#11110f', theme_color: '#11110f', lang: 'ar', dir: 'rtl',
       icons: [
         { src: ic['192'], sizes: '192x192', type: 'image/png', purpose: 'any' },
@@ -1152,7 +1156,7 @@ applyTheme(localStorage.getItem("rt_theme")||"dark");toggleTableField();renderMe
   function appSource(key) {
     return document.getElementById('app-' + key).textContent
       .replace(/<\\\/script/gi, '</script').replace(/<\\!--/g, '<!--')
-      .split('href="../cashier/"').join('href="' + urlFor('cashier') + '"');
+      .split('href="../cashier/"').join('href="' + linkFor('cashier') + '"');
   }
   function copyAttrs(from, to) {
     Array.prototype.slice.call(from.attributes).forEach(function (a) { to.setAttribute(a.name, a.value); });
@@ -1192,6 +1196,12 @@ applyTheme(localStorage.getItem("rt_theme")||"dark");toggleTableField();renderMe
     })(0);
   }
 
+  function canonicalize() {
+    var go = function (p) { try { history.replaceState(history.state, '', p + loc.hash); } catch (e) {} };
+    if (cur.key === 'menu') { if (/\/$/.test(path)) go(menuFile + loc.search); return; }
+    if (!cur.byPath && hasSW) navigator.serviceWorker.ready.then(function () { go(root + cur.key + '/'); });
+  }
+  canonicalize();
   try { mount(cur.key); }
   catch (e) {
     document.body.innerHTML = '<p style="text-align:center;padding:40px">تعذّر تشغيل التطبيق. <a style="color:#c9a96a" href="' + origin + path + '">إعادة المحاولة</a></p>';

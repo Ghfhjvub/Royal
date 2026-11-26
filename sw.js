@@ -12,9 +12,15 @@ self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET' || LIVE.test(r.url)) return;
   if (r.mode === 'navigate') {            // الصفحة: الشبكة أولاً ثم النسخة المخزنة
-    e.respondWith(fetch(r).then(res => {
-      if (res.ok) { const c = res.clone(); caches.open(CACHE).then(x => { x.put(r, c.clone()); x.put(SHELL, c); }); }
-      return res;
+    const u = new URL(r.url);
+    const virt = new RegExp('^' + new URL(self.registration.scope).pathname + '(cashier|manager)(/(index\\.html)?)?$', 'i').test(u.pathname);
+    const req = virt ? new Request(new URL('index.html', self.registration.scope)) : r;   // /cashier/ و /manager/ ← index.html
+    e.respondWith(fetch(req).then(async res => {
+      if (!res.ok) return res;
+      const html = await res.blob();
+      const c1 = new Response(html, { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' } });
+      caches.open(CACHE).then(x => { x.put(virt ? r : req, c1.clone()); x.put(SHELL, c1.clone()); });
+      return virt ? c1 : new Response(html, { status: 200, headers: res.headers });
     }).catch(() => caches.match(r).then(m => m || caches.match(SHELL))));
   } else if (STATIC.test(r.url)) {        // الخطوط والمكتبات: من المخزن ثم تحديث بالخلفية
     e.respondWith(caches.open(CACHE).then(c => c.match(r).then(m => {
