@@ -1,17 +1,25 @@
-const CACHE="royal-table-firebase-v5";
-const ASSETS=["./","./index.html","./manifest.webmanifest"];
-self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
-self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
-self.addEventListener("fetch",e=>{if(e.request.method==="GET" && new URL(e.request.url).origin===location.origin)e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match("./index.html"))))});
-self.addEventListener("push",event=>{
-  let data={title:"طلب جديد – ROYAL TABLE",body:"لديك تحديث جديد في المطعم",url:"./"};
-  try{if(event.data)data={...data,...event.data.json()}}catch(e){if(event.data)data.body=event.data.text()}
-  event.waitUntil(self.registration.showNotification(data.title,{body:data.body,icon:"./icon-192.png",badge:"./icon-192.png",data:{url:data.url},tag:data.tag||"royal-table"}));
-});
-self.addEventListener("notificationclick",event=>{
-  event.notification.close();const target=event.notification.data?.url||"./";
-  event.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(list=>{
-    for(const client of list){if("focus" in client)return client.focus()}
-    return clients.openWindow(target);
-  }));
+/* ROYAL TABLE — Service Worker مشترك للتطبيقات الثلاثة (المنيو / الكاشير / الإدارة)
+   يخزّن واجهة التطبيق فقط. طلبات Firebase (الطلبات، الدخول، المنتجات) لا يتدخل فيها أبداً. */
+const CACHE = 'royal-table-v1', SHELL = './__shell__';
+const LIVE = /(firestore|identitytoolkit|securetoken|firebaseinstallations|firebaseio)\.googleapis\.com|firebaseapp\.com\/__\/auth/;
+const STATIC = /fonts\.(googleapis|gstatic)\.com|gstatic\.com\/firebasejs|unpkg\.com|cdnjs\.cloudflare\.com/;
+
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', e => e.waitUntil(
+  caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())
+));
+self.addEventListener('fetch', e => {
+  const r = e.request;
+  if (r.method !== 'GET' || LIVE.test(r.url)) return;
+  if (r.mode === 'navigate') {            // الصفحة: الشبكة أولاً ثم النسخة المخزنة
+    e.respondWith(fetch(r).then(res => {
+      if (res.ok) { const c = res.clone(); caches.open(CACHE).then(x => { x.put(r, c.clone()); x.put(SHELL, c); }); }
+      return res;
+    }).catch(() => caches.match(r).then(m => m || caches.match(SHELL))));
+  } else if (STATIC.test(r.url)) {        // الخطوط والمكتبات: من المخزن ثم تحديث بالخلفية
+    e.respondWith(caches.open(CACHE).then(c => c.match(r).then(m => {
+      const f = fetch(r).then(res => { if (res.ok || res.type === 'opaque') c.put(r, res.clone()); return res; }).catch(() => m);
+      return m || f;
+    })));
+  }
 });
